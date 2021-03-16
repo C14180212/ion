@@ -43,7 +43,7 @@ export class FotoService {
   {
     const base64Data = await this.readAsBase64(foto)
 
-    const nama = new Date().getTime+'.jpeg';
+    const nama = new Date().getTime+'.png';
     const simpanFile = await Filesystem.writeFile({
       path : nama,
       data : base64Data,
