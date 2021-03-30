@@ -11,6 +11,7 @@ const {Camera, Filesystem, Storage} = Plugins;
 export class FotoService {
 
   public dataPhoto : Photo[] = [];
+  public pathcoll : string[] = [];
 
   private keyphoto : string = "foto"
   private platform :Platform
@@ -26,38 +27,51 @@ export class FotoService {
     });
     console.log(Foto)
 
-    this.dataPhoto.unshift({
-      filePath:"Load",
-      webViewPath:Foto.webPath
-    })
+    const fileFoto = await this.simpan(Foto)
+
+    this.dataPhoto.unshift(fileFoto)
+
 
    Storage.set({
       key:this.keyphoto,
       value: JSON.stringify(this.dataPhoto)
     })
-    this.simpan(Foto) 
+    this.simpan(Foto)
+  
   }
 
+  public async simpanPath(path : string){
+    this.pathcoll.push(path);
+  }
   public async simpan(foto : CameraPhoto)
   {
     const base64Data = await this.readAsBase64(foto)
 
-    const nama = new Date().getTime+'.png';
+    const nama = new Date().getTime()+'.png';
     const simpanFile = await Filesystem.writeFile({
       path : nama,
       data : base64Data,
       directory : FilesystemDirectory.Data
     });
 
+    const response = await fetch(foto.webPath);
+    const blob = await response.blob();
+    const dataFoto = new File([blob], foto.path, {
+      type: "image/png"
+    })
+
+  
     if (this.platform.is('hybrid')){
       return {
         filePath:simpanFile.uri,
-        webViewPath:Capacitor.convertFileSrc(simpanFile.uri)
+        webViewPath:Capacitor.convertFileSrc(simpanFile.uri),
+        dataImage : dataFoto
       }
     }else{
     return{
       filePath : nama,
-      webViewPath : foto.webPath
+      webViewPath : foto.webPath,
+      dataImage : dataFoto
     }
   }
 
@@ -106,4 +120,5 @@ export class FotoService {
 export interface Photo{
 filePath:string;
 webViewPath : string;
+dataImage : File;
 }
