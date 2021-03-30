@@ -7,16 +7,17 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div id="container">
-  <ion-text color="secondary">
-    <h1>About Us</h1>
-  </ion-text>
-  <p>
-    Saya William Ehud Gunawan 
-    C14180212,
-    lahir di Mojokerto Jawa Timur
-  </p>
-</div>
-
-
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let isiFot of fotoSer.dataPhoto; index as position">
+        <ion-img [src]="isiFot.webViewPath"></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+   <ion-fab>
+     <ion-fab-button (click)="TambahFoto()">
+       <ion-icon name="camera"></ion-icon>
+     </ion-fab-button>
+   </ion-fab>
 </ion-content>

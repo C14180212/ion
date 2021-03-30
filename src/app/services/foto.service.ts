@@ -31,12 +31,11 @@ export class FotoService {
       webViewPath:Foto.webPath
     })
 
-    Storage.set({
+   Storage.set({
       key:this.keyphoto,
       value: JSON.stringify(this.dataPhoto)
     })
-
-
+    this.simpan(Foto) 
   }
 
   public async simpan(foto : CameraPhoto)
@@ -102,7 +101,6 @@ export class FotoService {
       }
     }
   }
-
 }
 
 export interface Photo{
